@@ -23,18 +23,24 @@ class m201026_081631_create_question_table_and_relations extends Migration
             'name'          => $this->string()->notNull(),
         ], $tableOptions);
 
+        $this->batchInsert('{{%tests_category}}',['id','name'],[
+            [1,'frontend'],
+            [2,'backend'],
+            [3,'general'],
+        ]);
+
         /*Test*/
         $this->createTable('{{%test}}', [
             'id'            => $this->primaryKey(),
             'name'          => $this->string()->notNull(),
-            'foreword'      => $this->string()->notNull(),
+            'foreword'      => $this->string(),
             'category_id'   => $this->integer()->notNull(),
             'minimum_score' => $this->integer()->notNull(),
             'time_limit'    => $this->integer()->notNull(),
             'attempts'      => $this->integer()->notNull(),
             'create_time'   => $this->timestamp()->defaultExpression('CURRENT_TIMESTAMP'),
             'deadline'      => $this->timestamp()->defaultExpression('NULL'),
-            'teacher_id'    => $this->integer()->notNull(),
+//            'teacher_id'    => $this->integer()->notNull(),
         ], $tableOptions);
 
         /*Questions*/
@@ -43,8 +49,8 @@ class m201026_081631_create_question_table_and_relations extends Migration
             'title'         => $this->string()->notNull(),
             'type'          => 'ENUM("select_one", "select_many", "numeric", "string") NOT NULL',
             'difficulty'    => $this->integer()->notNull(),
-            'answer_id'     => $this->integer()->notNull(),
-            'answer_text'   => $this->string()->notNull(),
+            'answer_id'     => $this->integer(),
+            'answer_text'   => $this->string()->null(),
             'answer_number' => $this->decimal(15,4)->null()->defaultValue(null),
             'precision_percent' => $this->decimal(6,5)->null()->defaultValue(null),
             'picture'       => $this->string()->null()->defaultValue(null),
@@ -130,6 +136,12 @@ class m201026_081631_create_question_table_and_relations extends Migration
      */
     public function safeDown()
     {
+        /*Drop data*/
+        \Yii::$app->db->createCommand()->delete('{{%tests_category}}', ['in', 'id', [
+                1,2,3
+            ]]
+        )->execute();
+
         /*Drop relations*/
         $this->dropForeignKey('fk-student_test-test','{{%student_test}}');
         $this->dropIndex('index-student_test-test_id','{{%student_test}}');
