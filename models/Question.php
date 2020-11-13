@@ -272,7 +272,7 @@ class Question extends \yii\db\ActiveRecord
         if ($this->type === 'select_many') {
             $correctAnswersArray = array();
 
-            foreach ($this->correctAnswer1 as $correctAnswer) {
+            foreach ($this->getAnswerOptions()->all() as $correctAnswer) {
                 $correctAnswersArray[] = $correctAnswer->option_number;
             }
 

@@ -15,7 +15,7 @@ $answerOptionNumber = 0;
 //$csrfTokenName = Yii::app()->request->csrfTokenName;
 //$csrfToken = Yii::app()->request->csrfToken;
 $scenario = $model->scenario;
-
+/*
 $this->registerJs(
 "
     $('.question-text-".$key."').redactor({
@@ -56,7 +56,7 @@ $this->registerJs(
         plugins: ['viewTextarea']
     });
 ", \yii\web\View::POS_END);
-
+*/
 ?>
 
 <div class='row-fluid' id="<?php echo $rowId ?>">
@@ -64,7 +64,7 @@ $this->registerJs(
 <!--    --><?php //foreach ($model->getErrors() as $error):?>
 <!--        --><?//= $error[0];?>
 <!--    --><?php //endforeach; ?>
-
+<!--    --><?php //echo $form->errorSummary($model); ?>
     <?php echo $form->field($model, "[$key]id")->hiddenInput()->label(false);?>
     <?php echo $form->updateTypeField($model, $key, "updateType", array('key' => $key));?>
 
@@ -176,6 +176,7 @@ $this->registerJs(
 </div>
 
 <script>
+    /*
 $('.row-fluid').parent().addClass('ignore-mathjax');
 
 var counter = <?= $key?>;
@@ -186,4 +187,5 @@ eval("questionPreview"+counter+".callback.autoReset=true;");
 if($('.question-preview-'+counter).is(':empty')) {
 	eval("questionPreview"+counter+".Update();");
 }
+    */
 </script>

@@ -2,7 +2,9 @@
 
 namespace app\controllers;
 
+use app\components\DynamicTabularForm\DynamicTabularForm;
 use app\models\Question;
+use app\models\TestSearch;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -142,6 +144,112 @@ class TestController extends Controller
         ]);
     }
 
+    public function actionUpdate($id)
+    {
+
+        $test = $this->findModel($id);
+
+        $questions = $test->getQuestions()->all();
+
+        $test->scenario = 'update';//TODO remove this line
+//        $this->performAjaxValidation($test);
+
+        if (isset($_POST['Test'])) {
+            $test->attributes = $_POST['Test'];
+
+            if (isset($_POST['Question'])) {
+                $questions = array();
+                foreach ($_POST['Question'] as $key => $value) {
+
+                    if ($value['updateType'] == DynamicTabularForm::UPDATE_TYPE_CREATE) {
+                        $question = new Question();
+                    } else {
+                        if ($value['updateType'] == DynamicTabularForm::UPDATE_TYPE_UPDATE) {
+//                            $question = Question::model()->findByPk($value['id']);
+                            $question = Question::findOne($value['id']);
+                        } else {
+                            if ($value['updateType'] == DynamicTabularForm::UPDATE_TYPE_DELETE) {
+//                                $delete = Question::model()->findByPk($value['id']);
+                                $delete = Question::findOne($value['id']);
+                                if ($delete->delete()) {
+                                    unset($question);
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+
+                    $question->attributes = $value;
+                    $question->scenario = $value['modelScenario'];
+
+                    if ($question->scenario === 'select') {
+                        $numberOfOptions = range(1, count($value['answerOptionsArray']));
+                        $question->answerOptionsArray = array_combine($numberOfOptions, $value['answerOptionsArray']);
+                        $question->correctAnswers = $value['correctAnswers'];
+
+                        $answerOptionsId = array();
+
+                        foreach ($value['answerOptionsArray'] as $id => $option) {
+                            $answerOptionsId[] = $id;
+                        }
+
+                        $question->optionsNumber = $answerOptionsId;
+                    }
+
+                    $questions[] = $question;
+                }
+            }
+
+            $valid = $test->validate();
+            foreach ($questions as $question) {
+                $valid = $question->validate() & $valid;
+            }
+
+            if ($valid && count($questions)) {
+                $transaction = \Yii::$app->db->beginTransaction();
+                try {
+                    $test->save();
+                    $test->refresh();
+
+                    foreach ($questions as $question) {
+                        $question->test_id = $test->id;
+                        $question->save();
+                    }
+                    $transaction->commit();
+                } catch (Exception $e) {
+                    $transaction->rollback();
+                }
+
+                return $this->redirect(array(
+                    'test/view',
+                    'id' => $test->id
+                ));
+            }
+        }
+
+        return $this->render('create', array(
+            'test' => $test,
+            'questions' => $questions
+        ));
+    }
+
+    public function actionView($id)
+    {
+        $model = $this->findModel($id);
+        return $this->render('view',[
+            'model' => $model,
+        ]);
+    }
+
+    public function actionIndex()
+    {
+        $searchModel = new TestSearch();
+        $dataProvider = $searchModel->search(\Yii::$app->request->queryParams);
+        return $this->render('index', array(
+            'searchModel'  => $searchModel,
+            'dataProvider' => $dataProvider
+        ));
+    }
 
     protected function findModel($id)
     {

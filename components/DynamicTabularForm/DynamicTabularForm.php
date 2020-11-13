@@ -26,7 +26,6 @@ class DynamicTabularForm extends ActiveForm
     {
         parent::init();
         if ($this->rowUrl == null)
-//            $this->rowUrl = Url::to('getRowForm');
             $this->rowUrl = Url::to('getRowForm');
     }
     
@@ -50,32 +49,33 @@ class DynamicTabularForm extends ActiveForm
         }
         
         $buttonId = 'addButton-' . $this->rowViewCounter;
-        echo Html::tag('div','', array('class' => 'question-forms'));
+        $content = '';
 //        Model::validateMultiple($models);
         foreach ($models as $key => $model) {
-            $model->validate();
-            \Yii::$app->controller->renderPartial($rowView, array(
+            $content .=  \Yii::$app->controller->renderPartial($rowView, array(
                 'key' => $key+1,
                 'questionNumber' => $key+1,
                 'model' => $model,
                 'form' => $this
             ));
         }
+        echo Html::tag('div',$content, array('class' => 'question-forms'));
+
         echo "</div>";
-        
-        echo Html::tag('div', '' , array('class' => 'question-creator'));
+        $question_creator_content =  Html::dropDownList('scenario', 'empty', array(
+            'empty'=>'Выберите тип ответа на вопрос',
+            'select' => 'Ответ из перечисленных вариантов',
+            'string' => 'Ответ строкой',
+            'numeric' => 'Ответ числом'
+        ),['class' => 'question-drop-list', 'id' => 'scenario-drop-list']);
+        echo Html::tag('div', $question_creator_content , array('class' => 'question-creator'));
         /*
         echo CHtml::openTag('div', array('class' => 'create-question-header'));
         echo 'Добавить вопрос';
         echo "</div>";
         */
 
-        echo Html::dropDownList('scenario', 'empty', array(
-            'empty'=>'Выберите тип ответа на вопрос',
-            'select' => 'Ответ из перечисленных вариантов',
-            'string' => 'Ответ строкой',
-            'numeric' => 'Ответ числом'
-        ),['class' => 'question-drop-list', 'id' => 'scenario-drop-list']);
+
         /*
         echo CHtml::button('', array(
             'id' => $buttonId,

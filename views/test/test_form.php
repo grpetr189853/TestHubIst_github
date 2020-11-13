@@ -7,7 +7,7 @@ use yii\helpers\Html;
 $form = DynamicTabularForm::begin(array(
         'defaultRowView'=>'question_form',
         'id'=>'test-form',
-        'enableAjaxValidation'=>true,
+        'enableAjaxValidation'=>false,
         'enableClientValidation'=>true,
     ));
 //    $errorModels = $questions;
@@ -15,8 +15,8 @@ $form = DynamicTabularForm::begin(array(
     //var_dump(strtotime('2015-02-15 21:00:00'), $test->deadline);
 ?>
 
-<?php //echo $form->errorSummary($test); ?>
-<?php //echo $form->errorSummary($questions); ?>
+<?php //echo $form->errorSummary([$test, $questions]); ?>
+
 <div class="form th-test-from ignore-mathjax">
 
     <div class="test-fields">
@@ -99,7 +99,7 @@ $form = DynamicTabularForm::begin(array(
 ?>
 
 <div class="test-create-wrapper">
-<?php echo Html::submitButton($pageLabel, array('class' => 'create-test-button th-submit-button')); ?>
+<?php echo Html::submitButton($pageLabel, array('class' => 'create-test-button th-submit-button', 'name' => 'submit-button')); ?>
 <div class="qeustions-empty-error">
 
 </div>
