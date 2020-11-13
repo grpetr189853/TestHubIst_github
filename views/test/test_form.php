@@ -1,8 +1,10 @@
 <?php
 
 use app\components\DynamicTabularForm\DynamicTabularForm;
+use vova07\imperavi\Widget;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 $form = DynamicTabularForm::begin(array(
         'defaultRowView'=>'question_form',
@@ -35,7 +37,18 @@ $form = DynamicTabularForm::begin(array(
 <!--		--><?php //echo $form->labelEx($test,'foreword'); ?>
 <!--		--><?php //echo $form->textArea($test,'foreword',array('rows'=>10, 'cols'=>70, 'class'=>'foreword-redactor')); ?>
 <!--		--><?php //echo $form->error($test,'foreword'); ?>
-        <?= $form->field($test,'foreword')->textarea()?>
+        <?= $form->field($test,'foreword')->widget(Widget::className(), [
+            'settings' => [
+                'lang' => 'ru',
+                'minHeight' => 200,
+                'imageUpload' => Url::to(['/test/image-upload']),
+                'plugins' => [
+                    'clips',
+                    'fullscreen',
+                    'imagemanager',
+                ],
+            ],
+        ])?>
 	</div>
 	<div class="foreword-preview-container" style="visibility:hidden; position:absolute; top:0; left: 0">
 	    <div class="foreword-preview process-mathjax"></div>

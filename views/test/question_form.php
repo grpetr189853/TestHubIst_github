@@ -1,5 +1,6 @@
 <?php
 
+use vova07\imperavi\Widget;
 use yii\helpers\Url;
 
 ?>
@@ -81,7 +82,18 @@ $this->registerJs(
 <!--		--><?php //echo $form->labelEx($model,"title"); ?>
 <!--		--><?php //echo $form->textArea($model,"[$key]title",array('rows'=>6, 'cols'=>50, 'class' => 'questionField question-text-'.$key)); ?>
 <!--		--><?php //echo $form->error($model,"[$key]title", array(), false, false); ?>
-        <?php echo $form->field($model,"[$key]title")->textarea(array('rows'=>6, 'cols'=>50, 'class' => 'questionField question-text-'.$key))?>
+        <?php echo $form->field($model,"[$key]title")->widget(Widget::className(), [
+            'settings' => [
+                'lang' => 'ru',
+                'minHeight' => 200,
+                'imageUpload' => Url::to(['/question/image-upload']),
+                'plugins' => [
+                    'clips',
+                    'fullscreen',
+                    'imagemanager',
+                ],
+            ],
+        ])?>
 	</div>
 	<div class="question-preview-container-<?= $key ?>" style="visibility:hidden; position:absolute; top:0; left: 0">
 	    <div class="question-preview question-preview-<?= $key ?> process-mathjax"></div>

@@ -9,6 +9,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 use yii\web\Controller;
 use app\models\Test;
 use yii\web\NotFoundHttpException;
@@ -38,6 +39,16 @@ class TestController extends Controller
                 'class' => 'app\components\DynamicTabularForm\actions\GetRowForm',
                 'view' => 'question_form',
                 'modelClass' => 'app\models\Question',
+            ],
+            'image-upload' => [
+                'class' => 'vova07\imperavi\actions\UploadFileAction',
+                'url' => '/files' ,
+                'path' => '@app/files',
+            ],
+            'file-delete' => [
+                'class' => 'vova07\imperavi\actions\DeleteFileAction',
+                'url' => '/files',
+                'path' => '@app/files',
             ],
         ];
     }

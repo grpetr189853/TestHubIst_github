@@ -10,6 +10,22 @@ use yii\web\Controller;
 class QuestionController extends Controller
 {
 
+    public function actions()
+    {
+        return [
+            'image-upload' => [
+                'class' => 'vova07\imperavi\actions\UploadFileAction',
+                'url' => '/files' ,
+                'path' => '@app/files',
+            ],
+            'file-delete' => [
+                'class' => 'vova07\imperavi\actions\DeleteFileAction',
+                'url' => '/files',
+                'path' => '@app/files',
+            ],
+        ];
+    }
+
     public function actionOptionField($i, $key, $number)
     {
         $model = new Question();

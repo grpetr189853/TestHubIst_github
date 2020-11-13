@@ -48,8 +48,8 @@ class Test extends \yii\db\ActiveRecord
     public function scenarios()
     {
         return [
-            'insert' => ['name', 'category_id', 'question_count', 'minimum_score', 'time_limit', 'attempts','description','deadline'],
-            'update' => ['name', 'category_id', 'question_count', 'minimum_score', 'time_limit', 'attempts','description','deadline'],
+            'insert' => ['name', 'foreword', 'category_id', 'question_count', 'minimum_score', 'time_limit', 'attempts','description','deadline'],
+            'update' => ['name', 'foreword', 'category_id', 'question_count', 'minimum_score', 'time_limit', 'attempts','description','deadline'],
         ];
     }
 
