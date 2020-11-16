@@ -1,17 +1,15 @@
 <script>
-  // Класс div, который содержит в себе блоки превью и буфера, для отображения
-  // результат работы MathJax.
-  
   var forewordPreviewContainer = 'foreword-preview-container';
-
- // Переменная необходимая для переключения между редактором и MathJax превью.
- // Используется в плагине "viewPreview" редактора.
-  
   var forewordRedactorDetach;
 </script>
 <?php
 
 use yii\helpers\Url;
+
+/* @var $this yii\web\View */
+/* @var $test app\models\Test */
+/* @var $questions array */
+
 
 if ($test->scenario === 'insert') {
     $pageLabel = 'Создать тест';
@@ -21,56 +19,10 @@ if ($test->scenario === 'update') {
     $pageLabel = 'Изменить тест';
 }
 
-//$csrfTokenName = Yii::$app->request->csrfTokenName;
 $csrfTokenName = Yii::$app->request->csrfParam;
 $csrfToken = Yii::$app->request->csrfToken;
 $validateDataUrl = \Yii::$app->urlManager->createUrl('question/validate-data');
-$newOptionUrl = \Yii::$app->urlManager->createUrl('question/optionField');
-/*
-$cs = Yii::app()->clientScript;
-
-$cs->registerScriptFile('https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML');
-$cs->registerCssFile(Yii::app()->request->baseUrl.'/js/imperavi-redactor/redactor.css');
-$cs->registerScriptFile(Yii::app()->request->baseUrl.'/js/imperavi-redactor/plugins/viewTextarea/viewTextarea.js', CClientScript::POS_HEAD);
-$cs->registerScriptFile(Yii::app()->request->baseUrl.'/js/imperavi-redactor/redactor.js', CClientScript::POS_HEAD);
-$cs->registerScriptFile(Yii::app()->request->baseUrl.'/js/imperavi-redactor/lang/ru.js', CClientScript::POS_HEAD);
-*/
-/*
-$this->registerJs("
-    $('.foreword-redactor').redactor({
-        lang: 'ru',
-        buttonsHide: ['link'],
-        toolbarFixed: false,
-        pastePlainText: true,
-        imageLink: false,
-        imageUpload: '".Url::to('testForewordImages/tmpUpload')."',
-        imageUploadParam: 'TestForewordImage[imageFile]',
-        pasteCallback: function(html) {
-            return html.replace(/<p>(.*?)<\/p>/gi, '$1');
-        },
-        initCallback: function(){
-            $('.test-fields').find('div[class=redactor-editor]').addClass('redactor-editor-foreword');
-        },
-        imageUploadErrorCallback: function(json){
-            alert(json.message);
-        },
-        imageDeleteCallback: function(url, image){
-            $.ajax({
-                url:'" . Url::to('testForewordImages/deleteTmpImage') . "',
-                type: 'POST',
-                data: {
-                    url:url,
-                },
-            });
-        },
-        uploadImageFields: {
-        },
-        uploadFileFields: {
-        },
-        plugins: ['viewTextarea']
-    });
-", \yii\web\View::POS_END);
-*/
+$newOptionUrl = \Yii::$app->urlManager->createUrl('question/option-field');
 $this->registerJs("
         $('#test-form').submit(function(event){
             if($('.question-forms').is(':empty')) {
@@ -137,7 +89,7 @@ $this->registerJs("
                 var parent = $('.'+parentClass);
     
                 // Вычисляем номер следующего варианта ответа
-                var answerOptionNumber = parent.children('.row').size() + 1;
+                var answerOptionNumber = parent.children('.row').length + 1;
     
                 var optionIdArray = new Array();
                 var newOptionId;
@@ -206,8 +158,6 @@ $this->registerJs("
 echo "<h2 class='first-header'>{$pageLabel}</h2>";
 ?>
 <?php
-
-
 $this->registerJs("    
 function Preview(classPreview, classBuffer, classTextField) {
 	this.preview = $('.'+classPreview)[0];
@@ -309,7 +259,6 @@ $(function() {
         
     });
  });
-
 ", \yii\web\View::POS_END);
 ?>
 <div class="test-questions-anchors">

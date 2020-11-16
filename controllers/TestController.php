@@ -53,17 +53,15 @@ class TestController extends Controller
         ];
     }
 
-    /*Create Test and its Questions*/
+    /**
+     * Create Test and its Questions
+     * @return string|\yii\web\Response
+     * @throws \yii\db\Exception
+     */
     public function actionCreate() {
         $test = new Test();
         $questions = [];
         $test->scenario = 'insert';//TODO remove this line
-
-        /**
-         * Ajax валидация будет будет доступна только для модели Test, за валидацию полей формы
-         * вопросов будет отвечать экшн question/validateData
-         */
-//        $this->performAjaxValidation($test);
 
         if (isset($_POST['Test'])) {
             $test->attributes = $_POST['Test'];
@@ -120,8 +118,6 @@ class TestController extends Controller
                 $valid = $question->validate() && $valid;
             }
 
-//            $valid = Model::validateMultiple($questions) && $valid;
-
             if ($valid && count($questions)) {
                 $transaction = \Yii::$app->db->beginTransaction();
                 try {
@@ -144,17 +140,21 @@ class TestController extends Controller
             }
         }
 
-//        $test->validate();
-//        foreach ($questions as $question) {
-//            $question->validate();
-//        }
-//        Model::validateMultiple($questions);
         return  $this->render('create', [
             'test' => $test,
             'questions' => $questions
         ]);
     }
 
+    /**
+     * Update Test and its Questions
+     * @param $id
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\Exception
+     * @throws \yii\db\StaleObjectException
+     */
     public function actionUpdate($id)
     {
 
@@ -163,7 +163,6 @@ class TestController extends Controller
         $questions = $test->getQuestions()->all();
 
         $test->scenario = 'update';//TODO remove this line
-//        $this->performAjaxValidation($test);
 
         if (isset($_POST['Test'])) {
             $test->attributes = $_POST['Test'];

@@ -30,7 +30,7 @@ class QuestionController extends Controller
     {
         $model = new Question();
 
-        $this->renderPartial('new_answer_field', array(
+        return $this->renderPartial('new_answer_field', array(
             'model' => $model,
             'i' => $i,
             'number' => $number,

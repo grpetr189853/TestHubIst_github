@@ -6,6 +6,9 @@ namespace app\components\DynamicTabularForm\actions;
  */
 use yii\base\Action;
 use app\components\DynamicTabularForm\DynamicTabularForm;
+
+/* @var $form app\components\DynamicTabularForm\DynamicTabularForm */
+
 /**
  * Description of GetRowForm
  *
@@ -18,15 +21,13 @@ class GetRowForm extends Action{
     public $processOutput = true;
     
     public function run() {
-//        $controller = $this->getController();
-        
+
         $model = new $this->modelClass;
         $model->scenario = $_GET['scenario'];
         
         
         $form = new DynamicTabularForm();
-        
-//        $controller->renderPartial($this->view,array('key'=>$_GET['key'], 'questionNumber' => $_GET['questionNumber'], 'model'=>$model,'form'=>$form),false, $this->processOutput);
+
         return $this->controller->renderAjax($this->view,array('key'=>$_GET['key'], 'questionNumber' => $_GET['questionNumber'], 'model'=>$model,'form'=>$form));
     }
 }

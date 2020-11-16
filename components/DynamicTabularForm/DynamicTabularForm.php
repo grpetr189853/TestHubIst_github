@@ -7,6 +7,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 
+
 class DynamicTabularForm extends ActiveForm
 {
 
@@ -38,7 +39,6 @@ class DynamicTabularForm extends ActiveForm
 
         $htmlOptions = array_merge($htmlOptions, array('id' => get_class($model) . '_upateType_' . $htmlOptions['key'], 'class' => 'update-type-field'));
     
-//        return parent::hiddenField($model, "[$key]".$attribute, $htmlOptions);
         return parent::field($model, "[$key]".$attribute)->hiddenInput()->label(false);
     }
 
@@ -50,7 +50,6 @@ class DynamicTabularForm extends ActiveForm
         
         $buttonId = 'addButton-' . $this->rowViewCounter;
         $content = '';
-//        Model::validateMultiple($models);
         foreach ($models as $key => $model) {
             $content .=  \Yii::$app->controller->renderPartial($rowView, array(
                 'key' => $key+1,
@@ -69,24 +68,11 @@ class DynamicTabularForm extends ActiveForm
             'numeric' => 'Ответ числом'
         ),['class' => 'question-drop-list', 'id' => 'scenario-drop-list']);
         echo Html::tag('div', $question_creator_content , array('class' => 'question-creator'));
-        /*
-        echo CHtml::openTag('div', array('class' => 'create-question-header'));
-        echo 'Добавить вопрос';
-        echo "</div>";
-        */
 
-
-        /*
-        echo CHtml::button('', array(
-            'id' => $buttonId,
-            'class' => 'add-question-button fa fa-plus-square-o'
-        ));
-        */
         echo "<div class='add-question-button far fa-plus-square fa-3x' id={$buttonId} title='Добавить вопрос'></div>";
         
         echo "</div>";
         
-//        $cs = Yii::app()->clientScript;
         $view = $this->getView();
         $view->registerJs("
             var counter = " . count($models) . ";
