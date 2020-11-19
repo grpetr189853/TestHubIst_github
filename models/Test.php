@@ -91,4 +91,33 @@ class Test extends \yii\db\ActiveRecord
     {
         return $this->hasMany(StudentTest::className(), ['test_id' => 'id']);
     }
+
+    /**
+     * Метод вернет false, если время на выполнение теста вышло
+     */
+    public function checkTestTimeLimit($startTime, $timeLimit)
+    {
+        if (time() >= ($startTime + $timeLimit)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * The method returns an array of test questions IDs that the student has already answered
+     * @param $questionNumberIdPair array
+     * @return array
+     */
+    public static function getStudentAnswersByQuestionsId($questionNumberIdPair)
+    {
+        $usersAnswers = StudentAnswer::find()->where(['in', 'question_id', $questionNumberIdPair])->all();
+
+        $studentAnswersQuestionId = array();
+        foreach ($usersAnswers as $userAnswer){
+            $studentAnswersQuestionId[] = $userAnswer->question_id;
+        }
+
+        return $studentAnswersQuestionId;
+    }
+
 }

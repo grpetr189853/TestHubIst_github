@@ -4,11 +4,15 @@ namespace app\controllers;
 
 use app\components\DynamicTabularForm\DynamicTabularForm;
 use app\models\Question;
+use app\models\StudentAnswer;
+use app\models\StudentTest;
 use app\models\TestSearch;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\Controller;
 use app\models\Test;
@@ -241,6 +245,285 @@ class TestController extends Controller
             'test' => $test,
             'questions' => $questions
         ));
+    }
+
+    /**
+     * The action is performed when the student starts the test.
+     * If successful, the browser will be redirected to the first question of the test.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionInit($id)
+    {
+        // Init the test and reset the test results
+        $studentTest = StudentTest::find()->where('test_id=:testId', [
+            'testId' => $id
+        ])->one();
+        $studentTest->attempts -= 1;
+        $studentTest->start_time = date('Y-m-d H:i:s');
+        $studentTest->end_time = null;
+        try {
+            $studentTest->update();
+        } catch (StaleObjectException $e) {
+        } catch (\Throwable $e) {
+        }
+        if(StudentAnswer::find()->where('student_id=:studentId',[
+            'studentId'     => \Yii::$app->user->getId(),
+        ])->exists()) {
+            $answerModel = StudentAnswer::find()->where('student_id=:studentId',[
+                'studentId'     => \Yii::$app->user->getId(),
+            ])->all();
+            foreach ($answerModel as $answer){
+                try {
+                    $answer->delete();
+                } catch (StaleObjectException $e) {
+                } catch (\Throwable $e) {
+                }
+            }
+        }
+
+        return $this->redirect(array(
+            'process',
+            'id' => $id
+        ));
+
+    }
+
+    /**
+     * Performs the test.
+     * @param integer $id
+     * @param null $q
+     * @return mixed
+     * @throws \yii\base\ExitException
+     * @throws \yii\web\HttpException
+     */
+    public function actionProcess($id, $q = null) {
+        $userAnswers = Yii::$app->request->post('StudentAnswer');
+        if(isset($userAnswers)){
+            /**
+             * Before accepting an answer for verification, we check if the time has passed for the test.
+             * If the time is up, we will redirect to the page with the result.
+             */
+            if (! (new Test)->checkTestTimeLimit(Yii::$app->request->post('testStartTime'), Yii::$app->request->post('testTimeLimit'))) {
+                Yii::$app->session->set('endTest', true);
+                if (Yii::$app->request->isAjax) {
+                    echo Json::encode([
+                        'redirect' => Yii::$app->urlManager->createUrl('test/result', [
+                            'id' => Yii::$app->request->post('testId'),
+                        ])
+                    ]);
+
+                    Yii::$app->end();
+                } else {
+                    $this->redirect(array(
+                        'result',
+                        'id' => Yii::$app->request->post('testId'),
+                    ));
+                }
+            }
+
+            /**
+             * checks if the answer to the question exists - and if it does, it updates it; if it doesn't exist, it stores it in the database
+             */
+            $answerModel = new StudentAnswer();
+
+
+            $studentAnswer = ($answerModel)->getAnswerModel(Yii::$app->request->post('StudentAnswer')['question_id'], Yii::$app->request->post('StudentAnswer')['scenario'], Yii::$app->request->post('testId'));
+
+            $studentAnswer->attributes = Yii::$app->request->post('StudentAnswer');
+
+            if (isset(Yii::$app->request->post('StudentAnswer')['selectedAnswers'])) {
+                $studentAnswer->selectedAnswers = Yii::$app->request->post('StudentAnswer')['selectedAnswers'];
+            }
+
+            if ($studentAnswer->validate()) {
+                $studentAnswer->save(false);
+                echo JSON::encode(array(
+                    'validateStatus' => 'success'
+                ));
+            } else {
+                var_dump($studentAnswer->getErrors());
+            }
+
+            Yii::$app->end();
+        }
+
+        $test = Test::find()->where('id=:testId',['testId'=> $id])->one();//TODO: заменить методом loadModel()
+        $test_questions = Question::find()->where('test_id=:testId',['testId'=> $id])->all();
+
+        $directQuestionNumber = 1;
+
+        if ($directQuestionNumber = Yii::$app->request->get('q')) {
+            if ($directQuestionNumber === 'end') {
+                $this->redirect([
+                    'process',
+                    'id' => $test->id
+                ]);
+            }
+        } else {
+            $directQuestionNumber = 1;
+        }
+
+        if ($directQuestionNumber > count($test_questions)) {
+            throw new \yii\web\HttpException(404,'Not Found.');
+        }
+
+        $studentTest = StudentTest::find()->where('test_id=:testId', ['testId' => $id])->one();
+
+        $questionDataArray = array(); //An array containing the necessary information about all questionsх
+        $questionNumberIdPair = array(); // Array question number => question ID
+
+        foreach ($test_questions as $key => $question) {
+            $questionDataArray[$key + 1] = array(
+                'id' => $question->id,
+                'title' => $question->title,
+                'type' => $question->type,
+                'answerIdTextPair' => $question->answerIdTextPair ,// The array contains a pair of answer option ID => Answer option textа
+            );
+            $questionNumberIdPair[$key + 1] = $question->id;
+        }
+
+        $answerModel = new StudentAnswer();
+
+        return $this->render('test_starter',[
+            'tests_questions'  => $test_questions,
+            'test'         => $test,
+            'directQuestionNumber' => $directQuestionNumber,
+            'answerModel' => $answerModel,
+            'questionDataArray' => $questionDataArray,
+            'questionNumberIdPair' => $questionNumberIdPair,
+            'testTimeLimit' => $test->time_limit * 60,
+            'testStartTime' => strtotime($studentTest->start_time)
+        ]);
+    }
+
+    /**
+     * The action only allows POST requests and is intended to dynamically display the requested question.
+     * @return mixed
+     */
+    public function actionPostQuestion()
+    {
+        if (isset($_POST) && isset($_POST['questionNumber']) && isset($_POST['questionNumberIdPair'])) {
+            $questionNumber = $_POST['questionNumber'];
+            $numberOfQuestions = count($_POST['questionNumberIdPair']);
+
+            $questionDataArray = array();
+            $studentAnswersQuestionId = array();
+            $answerModel = null;
+
+            if (Yii::$app->request->post('questionDataArray')) {
+                $questionDataArray = $_POST['questionDataArray'];
+            }
+
+            $studentAnswersQuestionId = Test::getStudentAnswersByQuestionsId($_POST['questionNumberIdPair']);
+
+            $questionAlert = '';
+
+            if ($questionNumber == 'end') {
+                $questionAlert = 'Завершить тест?';
+
+                if (count($studentAnswersQuestionId) < $numberOfQuestions) {
+                    $questionAlert = 'Вы ответили не на все вопросы. ' . $questionAlert;
+                }
+            }
+            $answerModel = new StudentAnswer();
+            return $this->renderPartial('test_question', array(
+                'answerModel' => $answerModel,
+                'testID' => $_POST['testID'],
+                'questionNumber' => $questionNumber,
+                'questionNumberIdPair' => $_POST['questionNumberIdPair'],
+                'questionDataArray' => $questionDataArray,
+                'questionAlert' => $questionAlert,
+                'numberOfQuestions' => $numberOfQuestions,
+                'studentAnswersQuestionId' => $studentAnswersQuestionId,
+                'testTimeLimit' => $_POST['testTimeLimit'],
+                'testStartTime' => $_POST['testStartTime']
+            ));
+        }
+    }
+
+    /**
+     * If the test has not yet been run or is re-running, the action counts
+     * test result and brings the record in the UsersTests table to the appropriate form
+     * (assigns values to the result and end_time columns). Otherwise, just print the result of
+     * test execution.
+     * @param $id
+     * @return mixed
+     */
+    public function actionResult($id)
+    {
+        $studentTest = StudentTest::find()->where('test_id=:testId AND student_id=:studentId', array(
+            ':testId' => $id,
+            ':studentId' => Yii::$app->user->identity->id
+        ))->one();
+
+        if ($studentTest) {
+            $studentTotalScore = $studentTest->result;
+            $timeOutMessage = '';
+
+            if (isset($_POST['endTest']) || Yii::$app->session->get('endTest') === true) {
+
+                $studentTotalScore = 0;
+                if ($studentTest->studentAnswers) {
+                    foreach ($studentTest->studentAnswers as $answer) {
+                        $studentTotalScore = $studentTotalScore + $answer->result;
+                    }
+                }
+
+                $studentTest->result = $studentTotalScore;
+                $studentTest->end_time = date('Y-m-d H:i');
+
+                $timeLimit = strtotime($studentTest->start_time) + $studentTest->test->time_limit * 60;
+
+                if (strtotime($studentTest->end_time) > $timeLimit) {
+                    $studentTest->end_time = date('Y-m-d H:i', $timeLimit);
+                }
+
+                try {
+                    $studentTest->update();
+                } catch (StaleObjectException $e) {
+                    } catch (\Throwable $e) {
+                }
+                if (Yii::$app->session->get('endTest')) {
+                    $timeOutMessage = 'Время, отведенное на выполнение теста, вышло.';
+                }
+
+                Yii::$app->session->set('endTest', null);
+
+                return $this->redirect(array(
+                    'result',
+                    'id' => $id
+                ));
+            }
+
+            if (is_null($studentTotalScore)) {
+                return $this->redirect(array(
+                    'view',
+                    'id' => $id
+                ));
+            }
+
+            $message = 'Тест был успешно сдан.';
+            $testPassed = true;
+
+            if ($studentTotalScore < $studentTest->test->minimum_score) {
+                $message = 'Вы набрали недостаточно баллов для прохождения теста';
+                $testPassed = false;
+            }
+
+            return $this->render('test_result', array(
+                'totalScore' => $studentTotalScore,
+                'studentTest' => $studentTest,
+                'message' => $message,
+                'timeOutMessage' => $timeOutMessage,
+                'testPassed' => $testPassed
+            ));
+        } else {
+            return $this->redirect(array(
+                'view',
+                'id' => $id
+            ));
+        }
     }
 
     public function actionView($id)

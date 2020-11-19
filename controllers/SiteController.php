@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use DateTime;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -124,5 +125,11 @@ class SiteController extends Controller
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    public function actionGetServerTime()
+    {
+        $now = new DateTime();
+        echo $now->format("M j, Y H:i:s O");
     }
 }

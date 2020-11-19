@@ -65,7 +65,7 @@ class m201026_081631_create_question_table_and_relations extends Migration
             'answer_id'     => $this->integer()->null(),
             'answer_text'   => $this->string(),
             'answer_number' => $this->decimal(9,4)->null(),
-            'exec_time'     => $this->integer()->notNull(),
+            'exec_time'     => $this->integer()->null(),
             'result'        => $this->integer()->null(),
             'test_result'   => $this->integer()->null(),
         ], $tableOptions);
