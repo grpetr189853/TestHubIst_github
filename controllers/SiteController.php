@@ -2,14 +2,20 @@
 
 namespace app\controllers;
 
+use app\models\PasswordResetRequestForm;
+use app\models\ResetPasswordForm;
+use app\models\User;
 use DateTime;
 use Yii;
+use yii\base\InvalidParamException;
 use yii\filters\AccessControl;
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\SignupForm;
 
 class SiteController extends Controller
 {
@@ -132,4 +138,71 @@ class SiteController extends Controller
         $now = new DateTime();
         echo $now->format("M j, Y H:i:s O");
     }
+
+    public function actionSignup()
+    {
+        $model = new SignupForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($user = $model->signup()) {
+                if (Yii::$app->getUser()->login($user)) {
+                    return $this->goHome();
+                }
+            }
+        }
+
+        return $this->render('signup', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Requests password reset.
+     *
+     * @return mixed
+     */
+    public function actionRequestPasswordReset()
+    {
+        $model = new PasswordResetRequestForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->sendEmail()) {
+                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
+                return $this->goHome();
+            } else {
+                Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for email provided.');
+            }
+        }
+
+        return $this->render('passwordResetRequestForm', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Resets password.
+     *
+     * @param string $token
+     * @return mixed
+     * @throws BadRequestHttpException
+     */
+    public function actionResetPassword($token)
+    {
+        try {
+            $model = new ResetPasswordForm($token);
+        } catch (InvalidParamException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
+            Yii::$app->session->setFlash('success', 'New password was saved.');
+            return $this->goHome();
+        }
+
+        return $this->render('resetPasswordForm', [
+            'model' => $model,
+        ]);
+    }
+
+
 }
