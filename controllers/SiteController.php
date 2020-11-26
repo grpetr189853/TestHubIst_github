@@ -4,8 +4,13 @@ namespace app\controllers;
 
 use app\models\PasswordResetRequestForm;
 use app\models\ResetPasswordForm;
+use app\models\SignupAdminForm;
+use app\models\SignupStudentForm;
+use app\models\SignupTeacherForm;
 use app\models\User;
+use app\models\VerifyEmailForm;
 use DateTime;
+use InvalidArgumentException;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\filters\AccessControl;
@@ -27,12 +32,25 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout'],
+                'only' => ['logout', 'signup', 'about'],
                 'rules' => [
+                    [
+                        'actions' => ['signup'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
                     [
                         'actions' => ['logout'],
                         'allow' => true,
                         'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['about'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return User::isUserAdmin(Yii::$app->user->identity->username);
+                        }
                     ],
                 ],
             ],
@@ -202,6 +220,85 @@ class SiteController extends Controller
         return $this->render('resetPasswordForm', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * Signs amin up.
+     *
+     * @return mixed
+     */
+    public function actionSignupAdmin()
+    {
+        $model = new SignupAdminForm();
+        if ($model->load(Yii::$app->request->post()) && $model->signup()) {
+            Yii::$app->session->setFlash('success', 'Thank you for registration as Admin. Please check your inbox for verification email.');
+            return $this->goHome();
+        }
+
+        return $this->render('signup', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Signs teacher up.
+     *
+     * @return mixed
+     */
+    public function actionSignupTeacher()
+    {
+        $model = new SignupTeacherForm();
+        if ($model->load(Yii::$app->request->post()) && $model->signup()) {
+            Yii::$app->session->setFlash('success', 'Thank you for registration as Teacher. Please check your inbox for verification email.');
+            return $this->goHome();
+        }
+
+        return $this->render('signup', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Signs Student up.
+     *
+     * @return mixed
+     */
+    public function actionSignupStudent()
+    {
+        $model = new SignupStudentForm();
+        if ($model->load(Yii::$app->request->post()) && $model->signup()) {
+            Yii::$app->session->setFlash('success', 'Thank you for registration as Student. Please check your inbox for verification email.');
+            return $this->goHome();
+        }
+
+        return $this->render('signup', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Verify email address
+     *
+     * @param string $token
+     * @throws BadRequestHttpException
+     * @return yii\web\Response
+     */
+    public function actionVerifyEmail($token)
+    {
+        try {
+            $model = new VerifyEmailForm($token);
+        } catch (InvalidArgumentException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+        if ($user = $model->verifyEmail()) {
+            if (Yii::$app->user->login($user)) {
+                Yii::$app->session->setFlash('success', 'Your email has been confirmed!');
+                return $this->goHome();
+            }
+        }
+
+        Yii::$app->session->setFlash('error', 'Sorry, we are unable to verify your account with provided token.');
+        return $this->goHome();
     }
 
 

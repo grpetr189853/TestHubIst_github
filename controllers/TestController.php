@@ -7,9 +7,11 @@ use app\models\Question;
 use app\models\StudentAnswer;
 use app\models\StudentTest;
 use app\models\TestSearch;
+use app\models\User;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
@@ -27,6 +29,28 @@ class TestController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['create', 'update','init','process','result'],
+                'rules' => [
+                    [
+                        'actions' => ['create','update'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return User::isUserAdmin(\Yii::$app->user->identity->username)||User::isUserTeacher(\Yii::$app->user->identity->username);
+                        }
+                    ],
+                    [
+                        'actions' => ['init','process','result'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return User::isUserAdmin(\Yii::$app->user->identity->username)||User::isUserStudent(\Yii::$app->user->identity->username);
+                        }
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

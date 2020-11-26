@@ -8,10 +8,34 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
+
+/**
+ * User model
+ *
+ * @property integer $id
+ * @property string $username
+ * @property string $password_hash
+ * @property string $password_reset_token
+ * @property string $verification_token
+ * @property string $email
+ * @property string $auth_key
+ * @property integer $status
+ * @property integer $created_at
+ * @property integer $updated_at
+ * @property string $password write-only password
+ */
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
+    const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
+
+    const ROLE_ADMIN = 'admin';
+    const ROLE_TEACHER = 'teacher';
+    const ROLE_STUDENT = 'student';
+
+    const SCENARIO_CREATE = 'create';
+    const SCENARIO_LIST = 'list';
 
     public static function tableName()
     {
@@ -31,6 +55,17 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_LIST] = ['username','email' , 'password'];
+        $scenarios[self::SCENARIO_CREATE] = ['id','password_hash','password_reset_token','verification_token','auth_key','created_at','updated_at','username', 'email', 'password', 'status'];
+        return $scenarios;
     }
 
     public static function findIdentity($id)
@@ -60,6 +95,20 @@ class User extends ActiveRecord implements IdentityInterface
             'status' => self::STATUS_ACTIVE,
         ]);
     }
+
+    /**
+     * Finds user by verification email token
+     *
+     * @param string $token verify email token
+     * @return static|null
+     */
+    public static function findByVerificationToken($token) {
+        return static::findOne([
+            'verification_token' => $token,
+            'status' => self::STATUS_INACTIVE
+        ]);
+    }
+
 
     public static function isPasswordResetTokenValid($token)
     {
@@ -113,4 +162,57 @@ class User extends ActiveRecord implements IdentityInterface
         $this->password_reset_token = null;
     }
 
+    public function generateEmailVerificationToken()
+    {
+        $this->verification_token = Yii::$app->security->generateRandomString() . '_' . time();
+    }
+
+    /**
+     * Single table inheritance
+     * https://habr.com/ru/post/274925/
+     */
+    public static function instantiate($row)
+    {
+        switch ($row['type']) {
+            case Admin::TYPE:
+                return new Admin();
+            case Teacher::TYPE:
+                return new Teacher();
+            case Student::TYPE:
+                return new Student();
+            default:
+                return new self;
+        }
+    }
+
+
+    public static function isUserAdmin($username)
+    {
+        if (static::findOne(['username' => $username, 'type' => self::ROLE_ADMIN]))
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function isUserTeacher($username)
+    {
+        if (static::findOne(['username' => $username, 'type' => self::ROLE_TEACHER]))
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function isUserStudent($username)
+    {
+        if (static::findOne(['username' => $username, 'type' => self::ROLE_STUDENT]))
+        {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

@@ -44,7 +44,17 @@ FontAwesomeAsset::register($this);
     ];
 
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
+        $menuItems[] = [
+            'label' => 'Зарегистрироваться',
+            'items' => [
+                ['label' => 'Администратор', 'url' => ['/site/signup-admin']],
+                '<li class="divider"></li>',
+                ['label' => 'Преподаватель', 'url' => ['/site/signup-teacher']],
+                '<li class="divider"></li>',
+                ['label' => 'Студент', 'url' => ['/site/signup-student']],
+            ],
+            'options' => ['class' => 'menu'],
+        ];
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
     } else {
         $menuItems[] = '<li>'
