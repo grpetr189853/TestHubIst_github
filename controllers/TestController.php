@@ -31,10 +31,10 @@ class TestController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update','init','process','result'],
+                'only' => ['create', 'update','init','process','result','assign-test','view'],
                 'rules' => [
                     [
-                        'actions' => ['create','update'],
+                        'actions' => ['create','update','assign-test','view'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
@@ -280,8 +280,9 @@ class TestController extends Controller
     public function actionInit($id)
     {
         // Init the test and reset the test results
-        $studentTest = StudentTest::find()->where('test_id=:testId', [
-            'testId' => $id
+        $studentTest = StudentTest::find()->where('test_id=:testId AND student_id=:studentId', [
+            'testId' => $id,
+            'studentId' => \Yii::$app->user->getId(),
         ])->one();
         $studentTest->attempts -= 1;
         $studentTest->start_time = date('Y-m-d H:i:s');
@@ -392,7 +393,7 @@ class TestController extends Controller
             throw new \yii\web\HttpException(404,'Not Found.');
         }
 
-        $studentTest = StudentTest::find()->where('test_id=:testId', ['testId' => $id])->one();
+        $studentTest = StudentTest::find()->where('test_id=:testId  AND student_id=:studentId', ['testId' => $id,'studentId' => \Yii::$app->user->getId()])->one();
 
         $questionDataArray = array(); //An array containing the necessary information about all questionsх
         $questionNumberIdPair = array(); // Array question number => question ID
@@ -555,6 +556,36 @@ class TestController extends Controller
         $model = $this->findModel($id);
         return $this->render('view',[
             'model' => $model,
+        ]);
+    }
+
+    public function actionAssignTest($id) {
+        $searchModel = new \app\models\UserSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $studentTestArray = StudentTest::findAll(['test_id' => $id]);
+        if(Yii::$app->request->isAjax && isset($_POST['student_id'])){
+            $doDelete = ($_POST['doDelete'] == 'false') ? false: true;
+            if($doDelete){
+                $deletedTests = StudentTest::find()->where(['student_id'=> $_POST['student_id']])->andWhere(['test_id'=>$id])->all();
+                foreach ($deletedTests as $test){
+                    $test->delete();
+                }
+            } else {
+                $model = Test::findOne(['id'=> $id]);
+                $student_test = new StudentTest();
+                $student_test->test_id = $model->id;
+                $student_test->attempts = $model->attempts;
+                $student_test->student_id = $_POST['student_id'];
+                $student_test->deadline = $model->deadline;
+                $student_test->save();
+
+            }
+
+        }
+        return $this->render('list',[
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'studentTestArray' => $studentTestArray,
         ]);
     }
 

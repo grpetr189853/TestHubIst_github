@@ -110,7 +110,7 @@ class Test extends \yii\db\ActiveRecord
      */
     public static function getStudentAnswersByQuestionsId($questionNumberIdPair)
     {
-        $usersAnswers = StudentAnswer::find()->where(['in', 'question_id', $questionNumberIdPair])->all();
+        $usersAnswers = StudentAnswer::find()->where(['student_id' => \Yii::$app->user->getId()])->andWhere(['in', 'question_id', $questionNumberIdPair])->all();
 
         $studentAnswersQuestionId = array();
         foreach ($usersAnswers as $userAnswer){

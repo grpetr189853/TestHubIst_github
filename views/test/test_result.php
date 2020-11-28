@@ -1,7 +1,7 @@
 <?php
 
 /* @var $totalScore integer */
-/* @var $studentTest \common\models\UsersTests */
+/* @var $studentTest \app\models\StudentTest */
 /* @var $message string */
 
 use yii\helpers\Url; ?>
