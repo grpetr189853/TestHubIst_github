@@ -78,12 +78,13 @@ if(!empty($questionDataArray)) {
             break;
     }
 
-    $i = 0;
-    foreach ($questionDataArray['answerIdTextPair'] as $value) {
-        $i++;
-        $questionAnswer = preg_replace("{(<span class='option-number'>)(<\/span>)}ui", "$1 {$i} $2", $questionAnswer, 1);
+    if($questionDataArray['type'] == 'select_many' || $questionDataArray['type'] == 'select_one') {
+        $i=0;
+        foreach($questionDataArray['answerIdTextPair'] as $value) {
+            $i++;
+            $questionAnswer = preg_replace("{(<span class='option-number'>)(<\/span>)}ui", "$1 {$i} $2", $questionAnswer, 1);
+        }
     }
-
 }
 
 

@@ -3,7 +3,10 @@
 namespace app\controllers;
 
 use app\components\DynamicTabularForm\DynamicTabularForm;
+use app\models\AnswerOptions;
+use app\models\CorrectAnswers;
 use app\models\Question;
+use app\models\SManyAnswers;
 use app\models\StudentAnswer;
 use app\models\StudentTest;
 use app\models\TestSearch;
@@ -586,6 +589,61 @@ class TestController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'studentTestArray' => $studentTestArray,
+        ]);
+    }
+
+    public function actionStatistic($id) {
+        $student_answers = array(array(array()));
+        $correct_answers = array(array(array()));
+
+        $questions = Question::find()->where(['test_id'=>$id])->all();
+        $studentTest = StudentTest::find()->where(['test_id'=>$id])->all();
+
+        foreach ($studentTest as $test){
+            $user_name = (User::find()->where(['id'=> $test->student_id])->one())->username;
+            foreach ($questions as $key => $question) {
+                $studentAnswer = StudentAnswer::find()->where(['question_id'=>$question->id,'student_id'=>$test->student_id])->one();
+
+                if($studentAnswer->answer_id){
+                    $answer_text = (AnswerOptions::find()->where(['id' => $studentAnswer->answer_id])->one())->option_text;
+                    $student_answers[$user_name][$question->title] = [$studentAnswer->answer_id => $answer_text];
+                } elseif ($studentAnswer->answer_text) {
+                    $answer_text = $studentAnswer->answer_text;
+                    $student_answers[$user_name][$question->title] =  [$studentAnswer->answer_id => $answer_text];
+                } elseif ($studentAnswer->answer_number) {
+                    $answer_text = $studentAnswer->answer_number;
+                    $student_answers[$user_name][$question->title] =  [$studentAnswer->answer_id => $answer_text];
+                } else {
+                    $s_many_answers = SManyAnswers::find()->where(['answer_id' => $studentAnswer->id])->all();
+                    foreach ($s_many_answers as $answer) {
+                        $answer_text = (AnswerOptions::find()->where(['id' => $answer->s_answer])->one())->option_text;
+                        $student_answers[$user_name][$question->title][$answer->s_answer] = $answer_text ;
+                    }
+                }
+            }
+
+            foreach ($questions as $key => $question) {
+                if($question->type == 'select_one'){
+                    $answer_text = (AnswerOptions::find()->where(['id' => $question->answer_id])->one())->option_text;
+                    $correct_answers[$user_name][$question->title] = [$question->answer_id => $answer_text];
+                } elseif ($question->type == 'string' ) {
+                    $correct_answers[$user_name][$question->title] = [$question->answer_text => $question->answer_text];
+                } elseif ($question->type == 'numeric' ) {
+                    $correct_answers[$user_name][$question->title] = [$question->answer_number => $question->answer_number];
+                } elseif ($question->type == 'select_many' ) {
+                    $c_many_answers = CorrectAnswers::find()->where(['question_id'=> $question->id])->all();
+                    foreach ($c_many_answers as $answer) {
+                        $answer_text = (AnswerOptions::find()->where(['id' => $answer->c_answer])->one())->option_text;
+                        $correct_answers[$user_name][$question->title][$answer->c_answer] = $answer_text;
+                    }
+                }
+            }
+
+        }
+
+        return $this->render('statistic',[
+            'student_answers'=>$student_answers,
+            'correct_answers'=>$correct_answers,
         ]);
     }
 

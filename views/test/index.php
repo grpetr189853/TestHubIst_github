@@ -36,11 +36,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {update} {delete} {assign}',  // the default buttons + your custom button
+                'template' => '{view} {update} {delete} {assign} {statistic}',  // the default buttons + your custom button
                 'buttons' => [
                     'assign' => function($url, $model, $key) {     // render your custom button
                         return Html::a('Assign', ['test/assign-test', 'id' => $model->id]);
-                    }
+                    },
+                    'statistic' => function($url, $model, $key) {     // render your custom button
+                        return Html::a('Statistic', ['test/statistic', 'id' => $model->id]);
+                    },
                 ]
 
             ],
