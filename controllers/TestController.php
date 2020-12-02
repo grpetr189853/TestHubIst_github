@@ -45,7 +45,7 @@ class TestController extends Controller
                         }
                     ],
                     [
-                        'actions' => ['init','process','result'],
+                        'actions' => ['init','process','result','view'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {

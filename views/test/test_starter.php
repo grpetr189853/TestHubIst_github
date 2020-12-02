@@ -4,10 +4,10 @@ use yii\helpers\Url;
 use yii\web\UrlManager;
 
 /* @var $this yii\web\View */
-/* @var $test_questions \common\models\TestsQuestions */
-/* @var $test \common\models\Tests */
+/* @var $test_questions \app\models\Question */
+/* @var $test \app\models\Test */
 /* @var $directQuestionNumber integer */
-/* @var $answerModel \common\models\UsersAnswers */
+/* @var $answerModel \app\models\StudentAnswer */
 /* @var $questionDataArray array */
 /* @var $questionNumberIdPair array */
 /* @var $testTimeLimit integer */
