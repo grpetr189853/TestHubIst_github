@@ -12,6 +12,6 @@ use yii\helpers\Url; ?>
     <p>Попыток осталось: <?= $studentTest->attempts ?></p>
     <?php if($studentTest->attempts >= 1):?>
         <a class="start-test-button" type="button" href="<?= Url::to(['/test/init', 'id'=>$studentTest->test_id]) ?>">Пройти тест еще раз</a>
-        <a class="my-tests-button" type="button" href="<?= Url::to(['/test/index']) ?>">Перейти к тестам</a>
+        <a class="my-tests-button" type="button" href="<?= Url::to(['/student-test/index','status'=> 'notpassed']) ?>">Перейти к тестам</a>
     <?php endif;?>
 </div>

@@ -86,6 +86,20 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        if(!Yii::$app->user->isGuest){
+            if (User::isUserStudent(Yii::$app->user->identity->username)) {
+                $this->redirect(array(
+                    'student-test/index',
+                    'status' => 'notpassed'
+                ));
+            }
+            if (User::isUserAdmin(Yii::$app->user->identity->username) || User::isUserTeacher(Yii::$app->user->identity->username)) {
+                $this->redirect(array(
+                    'test/index'
+                ));
+            }
+        }
+
         return $this->render('index');
     }
 
