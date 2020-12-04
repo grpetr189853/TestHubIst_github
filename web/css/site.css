@@ -22,7 +22,7 @@ body {
 }
 
 .jumbotron {
-    text-align: center;
+    /*text-align: center;*/
     background-color: transparent;
 }
 
@@ -113,3 +113,67 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+/*****Main page - leyout*****/
+body {
+    background-color: #eee;
+}
+.th-navbar-default {
+    background-color: white;
+}
+.th-jumbotron {
+    background-color: white;
+}
+#login-form input[type="email"], #login-form input[type="text"], #login-form input[type="password"], div.th-test-from input[type="text"], div.th-register-from input[type="password"], div.th-register-from input[type="email"], div.th-register-from input[type="text"], div.th-test-from textarea.questionField, .question-answer input[type="text"], .question-answer input[type="number"] {
+    margin: 1em 0 0.5em 0;
+    width: 26%;
+    min-width: 150px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 6px;
+}
+div.form label {
+    font-weight: bold;
+    font-size: 0.9em;
+    display: block;
+}
+div.form .row {
+    margin: 5px 0;
+}
+.th-submit-button,.create-test-button,.login-button,.signup-button,.start-test-button,.submit-answer-button,.skip-question,.end-test-button,.my-tests-button,.general-button
+{
+    background: #ff9251;
+    border: 1px solid transparent;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ff9251
+    ), color-stop(1, #ff9251));
+    background: -moz-linear-gradient(center top, #ff9251 5%, #ff9251 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#829db2',
+    endColorstr='#ff9251');
+    background-color: #ff9251;
+    -webkit-border-top-left-radius: 6px;
+    -moz-border-radius-topleft: 6px;
+    border-top-left-radius: 6px;
+    -webkit-border-top-right-radius: 6px;
+    -moz-border-radius-topright: 6px;
+    border-top-right-radius: 6px;
+    -webkit-border-bottom-right-radius: 6px;
+    -moz-border-radius-bottomright: 6px;
+    border-bottom-right-radius: 6px;
+    -webkit-border-bottom-left-radius: 6px;
+    -moz-border-radius-bottomleft: 6px;
+    border-bottom-left-radius: 6px;
+    text-indent: 0;
+    border: 1px solid #829db2;
+    display: inline-block;
+    color: #ffffff;
+    font-family: Georgia, Arial, Helvetica, Geneva, sans-serif;
+    font-size: 14px;
+    line-height: 1;
+    font-weight: 500;
+    font-style: normal;
+    height: 41px;
+    line-height: 41px;
+    width: 153px;
+    text-decoration: none;
+    text-align: center;
+}
+/*****Main page - leyout*****/

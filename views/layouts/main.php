@@ -28,60 +28,61 @@ FontAwesomeAsset::register($this);
 <body>
 <?php $this->beginBody() ?>
 
-<div class="wrap">
-    <?php
-    NavBar::begin([
-        'brandLabel' => Yii::$app->name,
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
-        ],
-    ]);
-    $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'About', 'url' => ['/site/about']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
-    ];
+<div class="container th-container">
+    <div class="navbar navbar-default th-navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="<?= Yii::$app->request->hostInfo . Yii::$app->request->baseUrl?>/site/index"><?= Html::img(Yii::getAlias('@web').'/img/logo.png' ); ?></a>
+            </div>
 
-    if (Yii::$app->user->isGuest) {
-        $menuItems[] = [
-            'label' => 'Зарегистрироваться',
-            'items' => [
-                ['label' => 'Администратор', 'url' => ['/site/signup-admin']],
-                '<li class="divider"></li>',
-                ['label' => 'Преподаватель', 'url' => ['/site/signup-teacher']],
-                '<li class="divider"></li>',
-                ['label' => 'Студент', 'url' => ['/site/signup-student']],
-            ],
-            'options' => ['class' => 'menu'],
-        ];
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
-    } else {
-        $menuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
-            . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn btn-link logout']
-            )
-            . Html::endForm()
-            . '</li>';
-    }
+            <?php
 
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => $menuItems,
-    ]);
-    NavBar::end();
-    ?>
+                if (Yii::$app->user->isGuest) {
+                    $menuItems[] = [
+                        'label' => 'Зарегистрироваться',
+                        'items' => [
+                            ['label' => 'Администратор', 'url' => ['/site/signup-admin']],
+                            '<li class="divider"></li>',
+                            ['label' => 'Преподаватель', 'url' => ['/site/signup-teacher']],
+                            '<li class="divider"></li>',
+                            ['label' => 'Студент', 'url' => ['/site/signup-student']],
+                        ],
+                        'options' => ['class' => 'menu'],
+                    ];
+                    $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+                } else {
+                    $menuItems[] = '<li class="menu">'
+                        . Html::beginForm(['/site/logout'], 'post')
+                        . Html::submitButton(
+                            'Logout (' . Yii::$app->user->identity->username . ')',
+                            ['class' => 'btn btn-link logout']
+                        )
+                        . Html::endForm()
+                        . '</li>';
+                }
 
-    <div class="container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
-        <?= Alert::widget() ?>
-        <?= $content ?>
+                echo Nav::widget([
+                    'options' => ['class' => 'navbar-nav navbar-right'],
+                    'items' => $menuItems,
+                ]);
+                ?>
+            </div>
+        <!--/.container-fluid-->
+        </div>
+    <!--/.navbar-->
+    <div class="jumbotron th-jumbotron">
+        <?php echo $content; ?>
     </div>
+
 </div>
+
+
 
 <footer class="footer">
     <div class="container">

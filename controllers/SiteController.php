@@ -244,6 +244,7 @@ class SiteController extends Controller
     public function actionSignupAdmin()
     {
         $model = new SignupAdminForm();
+        $role = "Администратор";
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
             Yii::$app->session->setFlash('success', 'Thank you for registration as Admin. Please check your inbox for verification email.');
             return $this->goHome();
@@ -251,6 +252,7 @@ class SiteController extends Controller
 
         return $this->render('signup', [
             'model' => $model,
+            'role'  => $role,
         ]);
     }
 
@@ -262,6 +264,7 @@ class SiteController extends Controller
     public function actionSignupTeacher()
     {
         $model = new SignupTeacherForm();
+        $role = "Переподаватель";
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
             Yii::$app->session->setFlash('success', 'Thank you for registration as Teacher. Please check your inbox for verification email.');
             return $this->goHome();
@@ -269,6 +272,7 @@ class SiteController extends Controller
 
         return $this->render('signup', [
             'model' => $model,
+            'role'  => $role,
         ]);
     }
 
@@ -280,6 +284,7 @@ class SiteController extends Controller
     public function actionSignupStudent()
     {
         $model = new SignupStudentForm();
+        $role = "Студент";
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
             Yii::$app->session->setFlash('success', 'Thank you for registration as Student. Please check your inbox for verification email.');
             return $this->goHome();
@@ -287,6 +292,7 @@ class SiteController extends Controller
 
         return $this->render('signup', [
             'model' => $model,
+            'role'  => $role,
         ]);
     }
 
