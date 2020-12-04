@@ -176,4 +176,9 @@ div.form .row {
     text-decoration: none;
     text-align: center;
 }
+.main-page-intro h1, .main-reg-user-type {
+    font-family: Arial Black;
+    color: #ff9251;
+    text-shadow: #333333 6px 0px, #333333 1px 1px, #333333 0px 1px, #333333 -1px 1px, #333333 -1px 0px, #333333 -1px -1px, #333333 0px -1px, #333333 1px -1px, #333333 0 0 3px, #333333 0 0 3px, #333333 0 0 3px, #333333 0 0 3px, #333333 0 0 3px, #333333 0 0 3px, #333333 0 0 3px, #333333 0 0 3px;
+}
 /*****Main page - leyout*****/
