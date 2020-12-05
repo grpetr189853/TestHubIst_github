@@ -15,8 +15,8 @@ $this->title = 'My Yii Application';
         <div class="th-info">
             <p>Сервис позволяет проверять знания студентов в автоматическом режиме с помощью тестов. Зарегистрируйтесь, чтобы принять участие.</p>
             <div class="main-register-pics">
-                <a class="main-student-pic" href="<?= Yii::$app->urlManager->createUrl('site/signup-student')?>"><img title="Регистрация студента" src="<?= Yii::$app->request->baseUrl?>/img/student_pic.png"></a>
-                <a class="main-teacher-pic" href="<?= Yii::$app->urlManager->createUrl('site/signup-teacher')?>"><img title="Регистрация преподавателя" src="<?= Yii::$app->request->baseUrl?>/img/teacher_pic.png"></a>
+                <a class="main-student-pic" href="<?= Yii::$app->urlManager->createUrl('site/signup-student')?>"><img title="Регистрация студента" src="<?= Yii::$app->request->baseUrl?>/img/student_pic.png" style="width: 22% !important;"></a>
+                <a class="main-teacher-pic" href="<?= Yii::$app->urlManager->createUrl('site/signup-teacher')?>"><img title="Регистрация преподавателя" src="<?= Yii::$app->request->baseUrl?>/img/teacher_pic.png" style="width: 30% !important;"="30%"></a>
             </div>
         </div>
     </div>

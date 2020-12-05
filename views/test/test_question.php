@@ -38,7 +38,7 @@ if(!empty($questionDataArray)) {
     $form = ActiveForm::begin([
         'id' => 'answer-form',
         'action' => ['test/process', 'id' => $testID, 'q' => $questionNumber + 1],
-        'options'=>['class' => 'form-horizontal col-lg-4']
+        'options'=>['class' => 'form-horizontal']
     ]);
 
 //    $questionDataArray['answerIdTextPair'] = array_map(function ($string) {
@@ -112,7 +112,7 @@ if(!empty($questionDataArray)) {
 <?= Html::hiddenInput('testTimeLimit', $testTimeLimit); ?>
 <?= Html::hiddenInput('testStartTime', $testStartTime); ?>
 <div class="answer-buttons-container">
-        <?= Html::submitButton('Ответить', ['id'=>'btn-submit','class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Ответить', ['id'=>'btn-submit','class' => 'submit-answer-button']) ?>
 </div>
 <?php
     $this->registerJs('

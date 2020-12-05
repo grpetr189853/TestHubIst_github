@@ -72,7 +72,7 @@ function addClicker(link) {
 function changeSkipQuestionButton() {
 	if(nextQuestionNumber = document.getElementById(\'nextQuestionNumber\')) {
 		var href = "'. Url::to(['test/process','id' => $test->id]) . '"+"/"+ nextQuestionNumber.value;
-		$(\'.answer-buttons-container\').append(\'<a id="skip-question" class="btn btn-danger skip-question" type="button" href="\'+href+\'">Пропустить</a>\');
+		$(\'.answer-buttons-container\').append(\'<a id="skip-question" class="skip-question" type="button" href="\'+href+\'">Пропустить</a>\');
 		addClicker(document.getElementById("skip-question"));
     } else {
     	$(\'.skip-question\').css(\'display\', \'none\');

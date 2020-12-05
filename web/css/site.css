@@ -401,3 +401,42 @@ button.create-test-button:hover {
     background: #536572;
 }
 /*****Test/create test/update page*****/
+/*****Test/process*****/
+img {
+    width: 100%;
+}
+question-counter:hover {
+    border: 1px solid rgba(0, 0, 0, .6);
+}
+
+.test-question-counter {
+    width: 60px;
+    margin-left: 0px;
+    border: 1px solid rgba(0, 0, 0, .2);
+}
+.question-anchor, .test-question-counter {
+    width: 50px;
+    font-size: 13px;
+    padding: 5px 0;
+    border: 1px solid rgba(0, 0, 0, .2);
+    display: inline-block;
+    margin-right: 5px;
+    margin-left: 5px;
+    text-align: center;
+    color: rgba(0, 0, 0, .7) !important;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    background: #fff;
+}
+.test-countdown-clock {
+    float: right;
+    font-size: 3em;
+}
+.question-number {
+    font-weight: bold;
+}
+.field-studentanswer-question_id,.field-studentanswer-questionnumber,.field-studentanswer-scenario {
+    display: none;
+}
+/*****Test/process*****/
