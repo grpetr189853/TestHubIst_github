@@ -6,12 +6,13 @@ use yii\helpers\Html;
 /** @var $number integer */
 /** @var $key integer */
 ?>
-<div class="row answer-option-<?= $i ?>">
-    <div class="answer-option-number-<?= $i ?>"><?= $number ?>)</div>
-    <?php echo Html::activeTextInput($model, "[$key]answerOptionsArray[{$i}]", array('rows'=>2, 'cols'=>30, 'class' => "answer-text-area-{$key}-{$i} questionField", 'onkeyup' => "optionPreview{$key}{$i}.Update()")); ?>
+<div class="row answer-option-<?= $i ?>" style="display: block;">
+    <div class="answer-option-number-<?= $i ?>" style="display: inline-block"><?= $number ?>)</div>
+    <?= Html::activeLabel($model, "[$key]answerOptionsArray[{$i}]", ['label' => 'Вариант ответа','style' => 'display: inline-block']); ?>
+    <?php echo Html::activeTextInput($model, "[$key]answerOptionsArray[{$i}]", array('rows'=>2, 'cols'=>30, 'class' => "answer-text-area-{$key}-{$i} questionField", 'id' => "'question-{$key}-answeroptionsarray-{$i}'", 'style' =>'display: block; margin-left: 3%; width: 15%', 'onkeyup' => "optionPreview{$key}{$i}.Update()")); ?>
     <ul class="answer-option-bar">
-        <li title="Показать формулы" data-option-number="<?= $i ?>" data-question-number="<?= $key ?>" onclick="showAnswerOptionPreview(this)"><i class="show-math-button fa fa-superscript"></i></li>
-        <li title="Удалить" data-option-number="<?= $i ?>" data-question-number="<?= $key ?>" onclick="deleteOption(this)"><i class="deleteAnswerOption far fa-times-circle fa-2x"></i></li>
+        <li title="Показать формулы" data-option-number="<?= $i ?>" data-question-number="<?= $key ?>" onclick="showAnswerOptionPreview(this)" style="line-height: 3em;"><i class="show-math-button fa fa-superscript"></i></li>
+        <li title="Удалить" data-option-number="<?= $i ?>" data-question-number="<?= $key ?>" onclick="deleteOption(this)" style="line-height: 3em;"><i class="deleteAnswerOption far fa-times-circle fa-2x"></i></li>
     </ul>
     <!--    --><?php //echo Html::error($model,"[$key]answerOptionsArray[{$i}]"); ?>
     <div class="option-preview-container-<?= $key ?>-<?= $i ?>  options-preview-container" style="visibility:hidden; position:absolute; top:0; left: 0">

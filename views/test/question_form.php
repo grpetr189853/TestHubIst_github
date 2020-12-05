@@ -49,7 +49,7 @@ $scenario = $model->scenario;
                     'imagemanager',
                 ],
             ],
-        ])?>
+        ])->label("Текст вопроса")?>
 	</div>
 	<div class="question-preview-container-<?= $key ?>" style="visibility:hidden; position:absolute; top:0; left: 0">
 	    <div class="question-preview question-preview-<?= $key ?> process-mathjax"></div>
@@ -57,7 +57,7 @@ $scenario = $model->scenario;
 	</div>
 
 	<div class="row">
-        <?php echo $form->field($model,"[$key]difficulty")->textInput(array('class' => 'questionField')); ?>
+        <?php echo $form->field($model,"[$key]difficulty")->textInput(array('class' => 'questionField'))->label("Количество баллов за ответ"); ?>
 	</div>
 	
 	<?php if($scenario === 'select'):?>
@@ -66,13 +66,13 @@ $scenario = $model->scenario;
         <?php $answerOptionNumber++;?>
 	    <div class="row answer-option-<?= $i ?>">
 	      <div class="answer-option-number-<?= $i ?>"><?= $answerOptionNumber ?>)</div>
-            <?php echo $form->field($model, "[$key]answerOptionsArray[{$i}]")->textInput(array('class' => "answer-text-area-{$key}-{$i} questionField", 'onkeyup' => "optionPreview{$key}{$i}.Update()")); ?>
+            <?php echo $form->field($model, "[$key]answerOptionsArray[{$i}]")->textInput(array('class' => "answer-text-area-{$key}-{$i} questionField", 'onkeyup' => "optionPreview{$key}{$i}.Update()"))->label('Вариант ответа'); ?>
 	      <ul class="answer-option-bar">
 	        <li title="Показать формулы" data-option-number="<?= $i ?>" data-question-number="<?= $key ?>" onclick="showAnswerOptionPreview(this)">
 	          <i class="show-math-button fa fa-superscript"></i>
 	        </li>
-	        <li title="Удалить" data-option-number="<?= $i ?>" data-question-number="<?= $key ?>" onclick="deleteOption(this)">
-	          <i class="deleteAnswerOption fa fa-times-circle-o fa-2x"></i>
+	        <li title="Удалить" data-option-number="<?= $i ?>" data-question-number="<?= $key ?>" onclick="deleteOption(this)" class="delete-answer-option">
+	          <i class="deleteAnswerOption far fa-times-circle fa-2x"></i>
 	        </li>
 	      </ul>
 	      <div class="option-preview-container-<?= $key ?>-<?= $i ?> options-preview-container" style="visibility:hidden; position:absolute; top:0; left: 0">
@@ -97,7 +97,7 @@ $scenario = $model->scenario;
 	</div>
 	
     <div class="row">
-        <?php echo $form->field($model, "[$key]correctAnswers")->textInput( array('class' => 'questionField'));?>
+        <?php echo $form->field($model, "[$key]correctAnswers")->textInput( array('class' => 'questionField'))->label("Номера правильных ответов через запятую");?>
     </div>
     <?php endif;?>
 

@@ -67,12 +67,11 @@ class DynamicTabularForm extends ActiveForm
             'string' => 'Ответ строкой',
             'numeric' => 'Ответ числом'
         ),['class' => 'question-drop-list', 'id' => 'scenario-drop-list']);
+        $question_creator_content .= "<div class='add-question-button far fa-plus-square fa-3x' id={$buttonId} title='Добавить вопрос'></div>";
         echo Html::tag('div', $question_creator_content , array('class' => 'question-creator'));
 
-        echo "<div class='add-question-button far fa-plus-square fa-3x' id={$buttonId} title='Добавить вопрос'></div>";
-        
-        echo "</div>";
-        
+//        echo "<div class='add-question-button far fa-plus-square fa-3x' id={$buttonId} title='Добавить вопрос'></div>";
+
         $view = $this->getView();
         $view->registerJs("
             var counter = " . count($models) . ";

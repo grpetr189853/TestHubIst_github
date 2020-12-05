@@ -25,7 +25,7 @@ $form = DynamicTabularForm::begin(array(
 
     <div class="test-fields">
         <div class="row">
-            <?= $form->field($test,'name')->textInput() ?>
+            <?= $form->field($test,'name')->textInput()->label("Название теста") ?>
         </div>
         <div class="row">
 
@@ -40,7 +40,7 @@ $form = DynamicTabularForm::begin(array(
                     'imagemanager',
                 ],
             ],
-        ])?>
+        ])->label("Перисловие")?>
 	    </div>
         <div class="foreword-preview-container" style="visibility:hidden; position:absolute; top:0; left: 0">
             <div class="foreword-preview process-mathjax"></div>
@@ -48,19 +48,19 @@ $form = DynamicTabularForm::begin(array(
         </div>
 
        <div class="row">
-           <?= $form->field($test, 'category_id')->dropDownList(ArrayHelper::map(\app\models\TestsCategory::find()->all(), 'id', 'name'))->label(false); ?>
+           <?= $form->field($test, 'category_id')->dropDownList(ArrayHelper::map(\app\models\TestsCategory::find()->all(), 'id', 'name'),['class' => 'category-dropdown form-control'])->label("Категория теста"); ?>
        </div>
 
         <div class="row">
-            <?= $form->field($test,'minimum_score')->textInput()?>
+            <?= $form->field($test,'minimum_score')->textInput()->label("Минимальный балл")?>
         </div>
 
         <div class="row">
-            <?= $form->field($test,'time_limit')->textInput()?>
+            <?= $form->field($test,'time_limit')->textInput()->label("Время прохождения")?>
         </div>
 
         <div class="row">
-            <?= $form->field($test,'attempts')->textInput()?>
+            <?= $form->field($test,'attempts')->textInput()->label("Количество попыток")?>
         </div>
 
         <div class="row">
@@ -71,7 +71,7 @@ $form = DynamicTabularForm::begin(array(
                     $dateTimeHtmlOptions = array('value'=>'гггг-мм-дд чч:мм');
                 }
 
-                echo $form->field($test,'deadline')->textInput();
+                echo $form->field($test,'deadline')->textInput()->label("Дедлая по тесту в формате гггг-мм-дд чч:мм");
             ?>
 
         </div>
