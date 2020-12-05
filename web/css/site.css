@@ -182,3 +182,62 @@ div.form .row {
     text-shadow: #333333 6px 0px, #333333 1px 1px, #333333 0px 1px, #333333 -1px 1px, #333333 -1px 0px, #333333 -1px -1px, #333333 0px -1px, #333333 1px -1px, #333333 0 0 3px, #333333 0 0 3px, #333333 0 0 3px, #333333 0 0 3px, #333333 0 0 3px, #333333 0 0 3px, #333333 0 0 3px, #333333 0 0 3px;
 }
 /*****Main page - leyout*****/
+/*****Test/index page*****/
+.grid-view table.table-striped th a:hover {
+    color: #FFF;
+}
+
+.grid-view table.table-striped th a {
+    color: #fff;
+    font-weight: bold;
+    text-decoration: underline;
+}
+.grid-view table.table-striped th {
+    color: #fff;
+    font-weight: bold;
+    text-shadow: -1px -1px 0 rgba(0,0,0,0.25);
+    background: #ff9251;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.grid-view table.table-striped th, .grid-view table.table-striped td {
+    font-size: 0.9em;
+    border: 1px white solid;
+    padding: 0.3em;
+    border-radius: 6px;
+    height: 40px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.grid-view table.table-striped th, .grid-view table.table-striped td {
+    font-size: 0.9em;
+    border: 1px white solid;
+    padding: 0.3em;
+    border-radius: 6px;
+    height: 40px;
+}
+
+.skip-question:hover, .my-tests-button:hover, .delete-test-view:hover, .new-test-button:hover {
+    background: #0D7272;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #0D7272 ), color-stop(1, #0D7272));
+    background: -moz-linear-gradient(center top, #0D7272 5%, #0D7272 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0D7272', endColorstr='#0D7272');
+    background-color: #0D7272;
+}
+.skip-question,.my-tests-button,.delete-test-view, .new-test-button {
+    background: #15B1B2;
+    border: 1px solid transparent;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #15B1B2
+    ), color-stop(1, #15B1B2));
+    background: -moz-linear-gradient(center top, #15B1B2 5%, #15B1B2 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#15B1B2',
+    endColorstr='#15B1B2');
+    background-color: #15B1B2;
+}
+.general-button, .general-button:hover, .general-button:active, .general-button:link, .general-button:visited, a.start-test-button:hover, a.start-test-button:visited, a.start-test-button:active, a.start-test-button:link, .skip-question:hover, .skip-question:active, .skip-question:visited, .skip-question:link, a.my-tests-button, a.my-tests-button:hover, a.my-tests-button:visited, a.my-tests-button:link, a.my-tests-button:active {
+    text-decoration: none;
+    color: #fff;
+}
+/*****Test/index page*****/

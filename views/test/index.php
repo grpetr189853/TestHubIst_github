@@ -6,33 +6,30 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Tests';
+$this->title = 'Тесты';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="test-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create Test', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel'  => $searchModel,
+        'summary' => false,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+//            'id',
             'name',
-            'foreword',
-            'category_id',
+//            'foreword',
+//            'category_id',
             'minimum_score',
             //'time_limit:datetime',
-            //'attempts',
+            'attempts',
             //'create_time',
-            //'deadline',
+            'deadline',
 
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -50,5 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
-
+    <p>
+        <?= Html::a('Create Test', ['create'], ['class' => 'general-button new-test-button']) ?>
+    </p>
 </div>
