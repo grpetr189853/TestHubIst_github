@@ -1,27 +1,25 @@
 <?php
 
-/* @var $this yii\web\View */
-/* @var $name string */
-/* @var $message string */
-/* @var $exception Exception */
-
+use app\controllers\SiteController;
 use yii\helpers\Html;
 
-$this->title = $name;
+
+/* @var $this SiteController */
+/* @var $error array */
+
+$this->title=Yii::$app->name . ' - Error';
+if($code == 403) {
+	$messageHeader = 'Отказано в доступе';
+} else {
+	$messageHeader = "Ошибка {$code}";
+}
+
 ?>
-<div class="site-error">
+<h2><?= $messageHeader ?></h2>
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <div class="alert alert-danger">
-        <?= nl2br(Html::encode($message)) ?>
-    </div>
-
-    <p>
-        The above error occurred while the Web server was processing your request.
-    </p>
-    <p>
-        Please contact us if you think this is a server error. Thank you.
-    </p>
-
+<div class="error">
+<?php echo Html::encode($message); ?>
+</div>
+<div class="contact-admin">
+    Электронный адрес для связи с администрацией: <?= Html::a(Yii::$app->params['adminEmail'], array('site/contact')); ?>.
 </div>

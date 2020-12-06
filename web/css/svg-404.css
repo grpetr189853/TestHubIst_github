@@ -1,0 +1,38 @@
+svg{
+  width: 70%;
+  height: 70%;
+  margin: 0 auto;
+  margin-top: 100px;
+}
+
+path{ 
+  
+-webkit-transition: stroke-dashoffset 2s ease-in-out; 
+  transition: stroke-dashoffset 2s ease-in-out;
+}
+
+.error-wrapper {
+	margin:0;
+	padding:30px;
+	font:12px/1.5 Helvetica,Arial,Verdana,sans-serif;
+	text-align: center;
+}
+
+h1 {
+	margin:0;
+	font-size:48px;
+	font-weight:normal;
+	line-height:48px;
+}
+
+strong {
+	display:inline-block;
+	width:65px;
+}
+
+.error-wrapper {
+	padding-top: 75px;
+}
+.error-message {
+	padding-top: 10px;
+}

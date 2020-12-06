@@ -69,9 +69,9 @@ class SiteController extends Controller
     public function actions()
     {
         return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
+//            'error' => [
+//                'class' => 'yii\web\ErrorAction',
+//            ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
@@ -321,5 +321,41 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
+
+    public function actionError()
+    {
+        if ($error = Yii::$app->errorHandler->exception) {
+            if (Yii::$app->request->isAjax) {
+                echo $error['message'];
+            } else {
+                $defaultMessage = 'Сервис временно испытывает проблемы. Приносим извинения за временные неудобства.';
+
+                $layout = 'error';
+
+                switch ($error->statusCode) {
+                    case '404':
+                        $layout = 'error404';
+                        break;
+                    /*
+                    case '500':
+                        $error['message'] = $defaultMessage;
+                        break;
+                    case '400':
+                        $error['message'] = 'Запрос введеный вами некорректен. Пожалуйста, убедитесь в его правильности.';
+                        break;
+                    case '403':
+                        $message = $error->getMessage();
+//                        $error['message'] = 'У вас нет прав доступа на эту страницу.';
+                        break;
+                    default:
+                        $error['message'] = 'Возникла непредвиденная ошибка. Приносим извинения за временные неудобства.';
+                        break;
+                    */
+                }
+
+                return $this->render($layout, $error);
+            }
+        }
+    }
 
 }

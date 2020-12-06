@@ -34,10 +34,10 @@ class TestController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update','init','process','result','assign-test','view'],
+                'only' => ['create', 'update','init','process','result','assign-test','view','index'],
                 'rules' => [
                     [
-                        'actions' => ['create','update','assign-test','view'],
+                        'actions' => ['create','update','assign-test','view','index'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
