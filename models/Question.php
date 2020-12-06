@@ -87,7 +87,7 @@ class Question extends \yii\db\ActiveRecord
             [['type'], 'string'],
             [['difficulty', 'answer_id', 'test_id'], 'integer'],
             [['answer_number', 'precision_percent'], 'number'],
-            [['title', 'answer_text', 'picture'], 'string', 'max' => 255],
+            [['title', 'answer_text', 'picture'], 'string', 'max' => 65535],
             [['test_id'], 'exist', 'skipOnError' => true, 'targetClass' => Test::className(), 'targetAttribute' => ['test_id' => 'id']],
             /*
             [['correctAnswers'], 'required', 'on' => 'select'],
