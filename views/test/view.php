@@ -6,7 +6,8 @@ use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Test */
-
+/* @var $foreword string */
+/* @var $category string */
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Tests', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
@@ -18,8 +19,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php if(User::isUserAdmin(\Yii::$app->user->identity->username)||User::isUserTeacher(\Yii::$app->user->identity->username)):?>
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('Обновить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
@@ -36,12 +37,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
+//            'id',
             'name',
-            'foreword',
-            'category_id',
+            ['label'=>'Foreword','value'=> html_entity_decode($foreword)],
+            ['label'=> 'Category','value'=> $category],
             'minimum_score',
-            'time_limit:datetime',
+            'time_limit',
             'attempts',
             'create_time',
             'deadline',

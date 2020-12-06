@@ -9,6 +9,7 @@ use app\models\Question;
 use app\models\SManyAnswers;
 use app\models\StudentAnswer;
 use app\models\StudentTest;
+use app\models\TestsCategory;
 use app\models\TestSearch;
 use app\models\User;
 use Yii;
@@ -557,8 +558,12 @@ class TestController extends Controller
     public function actionView($id)
     {
         $model = $this->findModel($id);
+        $foreword = $model->foreword;
+        $category = (TestsCategory::find()->where(['id' => $model->category_id])->one())->name;
         return $this->render('view',[
             'model' => $model,
+            'foreword' => $foreword,
+            'category' => $category,
         ]);
     }
 

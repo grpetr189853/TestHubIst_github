@@ -9,8 +9,11 @@ $this->title = 'Signup';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-signup">
-
-    <p>Заполните следующие поля что бы зарегистрироваться как <?= $role; ?>:</p>
+    <div class="row">
+        <div class="col-lg-4">
+            <p>Заполните следующие поля что бы зарегистрироваться как <?= $role; ?>:</p>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-12">
 

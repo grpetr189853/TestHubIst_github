@@ -12,7 +12,11 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
 
-    <p>Введите свое имя пользователя и пароль, указанный при регистрации:</p>
+    <div class="row">
+        <div class="col-lg-4">
+            <p>Введите свое имя пользователя и пароль, указанный при регистрации:</p>
+        </div>
+    </div>
 
     <?php $form = ActiveForm::begin([
         'layout'=>'horizontal',
@@ -43,8 +47,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ]) ?>
         </div>
         <div class="row forgot">
-            <div style="color:#999;margin:1em 0" class="col-lg-offset-1 col-lg-3 text-center">
-                <?= Html::a('Забыли пароль?', ['site/request-password-reset']) ?>.
+            <div class="form-group field-forgot text-left">
+                <div style="color:#999;/*margin:1em 0;*/display: flex;" class="col-lg-offset-1 col-lg-3 text-center">
+                    <?= Html::a('Забыли пароль?', ['site/request-password-reset']) ?>.
+                </div>
+                <div class="div col-lg-8">
+
+                </div>
             </div>
         </div>
         <div class="row buttons">

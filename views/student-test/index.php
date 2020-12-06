@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{pass}',  // the default buttons + your custom button
                 'buttons' => [
                     'pass' => function($url, $model, $key) {     // render your custom button
-                        return Html::a('Pass Test', ['test/view', 'id' => $model->test_id]);
+                        return Html::a('<i class="fas fa-running fa-2x"></i>', ['test/view', 'id' => $model->test_id]);
                     },
                 ],
             ]

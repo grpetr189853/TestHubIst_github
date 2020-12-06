@@ -36,10 +36,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{view} {update} {delete} {assign} {statistic}',  // the default buttons + your custom button
                 'buttons' => [
                     'assign' => function($url, $model, $key) {     // render your custom button
-                        return Html::a('Assign', ['test/assign-test', 'id' => $model->id]);
+                        return Html::a('<i class="fas fa-user-tag fa-2x"></i>', ['test/assign-test', 'id' => $model->id]);
                     },
                     'statistic' => function($url, $model, $key) {     // render your custom button
-                        return Html::a('Statistic', ['test/statistic', 'id' => $model->id]);
+                        return Html::a('<i class="fas fa-chart-line fa-2x"></i>', ['test/statistic', 'id' => $model->id]);
                     },
                 ]
 

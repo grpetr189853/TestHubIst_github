@@ -55,12 +55,12 @@ FontAwesomeAsset::register($this);
                         ],
                         'options' => ['class' => 'menu'],
                     ];
-                    $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+                    $menuItems[] = ['label' => 'Войти', 'url' => ['/site/login']];
                 } else {
                     $menuItems[] = '<li class="menu">'
                         . Html::beginForm(['/site/logout'], 'post')
                         . Html::submitButton(
-                            'Logout (' . Yii::$app->user->identity->username . ')',
+                            'Выйти (' . Yii::$app->user->identity->username . ')',
                             ['class' => 'btn btn-link logout']
                         )
                         . Html::endForm()
