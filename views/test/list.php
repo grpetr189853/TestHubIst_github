@@ -59,11 +59,12 @@ $('input:checkbox').each(function(e){
 
 //function to get url parameters
 function getUrlParams(url = location.search){
-  var regex = /[/&]([^=#]+)=([^&#]*)/g, params = {}, match;
-  while(match = regex.exec(url)) {
-      params[match[1]] = match[2];
-  }
-  return params;
+  // var regex = /[/&]([^=#]+)=([^&#]*)/g, params = {}, match;
+  // while(match = regex.exec(url)) {
+  //     params[match[1]] = match[2];
+  // }
+  // return params;
+  return url.substr(url.lastIndexOf('/') + 1);
 }
 $(\"body\").on(\"click\",\"#assign-table\", function(e){
        e.preventDefault();
