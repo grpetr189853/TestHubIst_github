@@ -63,7 +63,7 @@ function getUrlParams(url = location.search){
   // while(match = regex.exec(url)) {
   //     params[match[1]] = match[2];
   // }
-  // return params;
+  // return params; 
   return url.substr(url.lastIndexOf('/') + 1);
 }
 $(\"body\").on(\"click\",\"#assign-table\", function(e){
