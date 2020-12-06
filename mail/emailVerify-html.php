@@ -6,6 +6,7 @@ use yii\helpers\Html;
 
 $verifyLink = Yii::$app->urlManager->createAbsoluteUrl(['site/verify-email', 'token' => $user->verification_token]);
 ?>
+<?= Html::csrfMetaTags() ?>
 <div class="verify-email">
     <p>Hello <?= Html::encode($user->username) ?>,</p>
 
