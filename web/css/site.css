@@ -440,3 +440,41 @@ question-counter:hover {
     display: none;
 }
 /*****Test/process*****/
+/*****Test/statistic*****/
+.table-statistic {
+    border-collapse: collapse;
+    line-height: 1.1;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    background:  radial-gradient(farthest-corner at 50% 50%, white, #DCECF8);
+    color: #0C213B;
+}
+.table-statistic caption {
+    font-family: annabelle, cursive;
+    font-weight: bold;
+    font-size: 2em;
+    padding: 10px;
+    color: #ff9251;
+    text-shadow: 1px 1px 0 rgba(0,0,0,.3);
+}
+.table-statistic th {
+    padding: 10px;
+    border: 1px solid #A9E2CC;
+}
+.table-statistic td {
+    font-size: 0.8em;
+    padding: 5px 7px;
+    border: 1px solid #A9E2CC;
+}
+.table-statistic .first {
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+}
+.table-statistic {
+    background-color: #F3F3F3;
+    padding: 10px 20px 10px 10px;
+    border-radius: 6px;
+    border: 10px solid #829DB2;
+    margin-top: 30px;
+}
+/*****Test/statistic*****/

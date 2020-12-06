@@ -4,12 +4,12 @@
 /* @var $correct_answers array */
 ?>
 
-<table border="1" width="50%" cellpadding="5" style="float: left">
-    <caption>Ответы студента</caption>
+<table border="1" width="50%" cellpadding="5" class="table-statistic">
+    <caption>Статистика</caption>
     <tr>
         <th>Пользователь</th>
         <th>Вопрос</th>
-        <th>Ответы</th>
+        <th>Ответы студента</th>
         <th>Правильные ответы</th>
     </tr>
     <?php foreach ($student_answers as $key1 => $questions): ?>
