@@ -595,17 +595,24 @@ class TestController extends Controller
     public function actionStatistic($id) {
         $student_answers = array(array(array()));
         $correct_answers = array(array(array()));
-
+        $result_points = array();
         $questions = Question::find()->where(['test_id'=>$id])->all();
         $studentTest = StudentTest::find()->where(['test_id'=>$id])->all();
-
+        $test_name = (Test::find()->where(['id'=> $id])->one())->name;
         foreach ($studentTest as $test){
             $user_name = (User::find()->where(['id'=> $test->student_id])->one())->username;
             foreach ($questions as $key => $question) {
-                $studentAnswer = StudentAnswer::find()->where(['question_id'=>$question->id,'student_id'=>$test->student_id])->one();
+                $result_points[$user_name] = (StudentTest::find()->where(['student_id' => $test->student_id, 'test_id'=> $id])->one())->result;
+                $studentAnswer = StudentAnswer::find()->where(['question_id' => $question->id, 'student_id' => $test->student_id])->one();
 
-                if($studentAnswer->answer_id){
-                    $answer_text = (AnswerOptions::find()->where(['id' => $studentAnswer->answer_id])->one())->option_text;
+                if($studentAnswer == null){
+                    $student_answers[$user_name][$question->title] = ['Нет статистики' => 'Нет статистики'];
+                } elseif($studentAnswer->answer_id){
+                    if(AnswerOptions::find()->where(['id' => $studentAnswer->answer_id])->exists()){
+                        $answer_text = (AnswerOptions::find()->where(['id' => $studentAnswer->answer_id])->one())->option_text;
+                    } else {
+                        $answer_text = 'Нет статистики';
+                    }
                     $student_answers[$user_name][$question->title] = [$studentAnswer->answer_id => $answer_text];
                 } elseif ($studentAnswer->answer_text) {
                     $answer_text = $studentAnswer->answer_text;
@@ -644,6 +651,8 @@ class TestController extends Controller
         return $this->render('statistic',[
             'student_answers'=>$student_answers,
             'correct_answers'=>$correct_answers,
+            'result_points'  =>$result_points,
+            'test_name'      =>$test_name,
         ]);
     }
 
