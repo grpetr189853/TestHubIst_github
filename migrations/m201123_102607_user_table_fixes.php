@@ -12,8 +12,9 @@ class m201123_102607_user_table_fixes extends Migration
      */
     public function safeUp()
     {
+        $this->execute("create type user_type as enum ('student', 'teacher', 'admin')");
         $this->addColumn('{{%user}}', 'verification_token', $this->string()->defaultValue(null));
-        $this->addColumn('{{%user}}', 'type', "ENUM('student', 'teacher', 'admin')");
+        $this->addColumn('{{%user}}', 'type', "user_type");
     }
 
     /**

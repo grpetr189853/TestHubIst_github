@@ -17,6 +17,9 @@ class m201026_081631_create_question_table_and_relations extends Migration
             $tableOptions = 'CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci ENGINE=InnoDB';
         }
 
+    
+        $this->execute("create type scenario as enum ('select_one', 'select_many', 'numeric','string')");
+
         /*Tests Category*/
         $this->createTable('{{%tests_category}}',[
             'id'            => $this->primaryKey(),
@@ -47,7 +50,7 @@ class m201026_081631_create_question_table_and_relations extends Migration
         $this->createTable('{{%question}}',[
             'id'            => $this->primaryKey(),
             'title'         => $this->string()->notNull(),
-            'type'          => 'ENUM("select_one", "select_many", "numeric", "string") NOT NULL',
+            'type'          => "scenario",
             'difficulty'    => $this->integer()->notNull(),
             'answer_id'     => $this->integer(),
             'answer_text'   => $this->string()->null(),
