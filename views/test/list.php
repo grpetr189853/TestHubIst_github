@@ -59,7 +59,7 @@ $('input:checkbox').each(function(e){
 
 //function to get url parameters
 function getUrlParams(url = location.search){
-  var regex = /[?&]([^=#]+)=([^&#]*)/g, params = {}, match;
+  var regex = /[/&]([^=#]+)=([^&#]*)/g, params = {}, match;
   while(match = regex.exec(url)) {
       params[match[1]] = match[2];
   }
