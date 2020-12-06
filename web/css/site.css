@@ -478,3 +478,17 @@ question-counter:hover {
     margin-top: 30px;
 }
 /*****Test/statistic*****/
+/*****Test/student-test*****/
+a.student-test-status-nav {
+    color: #fff;
+    background-color: #17BEBF;
+    position: relative;
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 3px;
+    text-decoration: none;
+}
+.student-test-status-nav-wrapper {
+    margin-bottom: 10px;
+}
+/*****Test/student-test*****/

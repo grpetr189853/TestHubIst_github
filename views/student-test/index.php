@@ -6,19 +6,18 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Student Tests';
+$this->title = 'Мои тесты';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="student-test-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-
-        <?= Html::a('Not passed', ['index','status'=> 'notpassed'], ['class' => 'btn btn-info']) ?>
-        <?= Html::a('Not completed', ['index','status'=> 'notcompleted'], ['class' => 'btn btn-warning']) ?>
-        <?= Html::a('Failed', ['index','status'=> 'failed'], ['class' => 'btn btn-danger']) ?>
-        <?= Html::a('Completed', ['index','status'=> 'completed'], ['class' => 'btn btn-success']) ?>
-
+    <div class="student-test-status-nav-wrapper">
+        <?= Html::a('Не пройденные', ['index','status'=> 'notpassed'], ['class' => 'student-test-status-nav']) ?>
+        <?= Html::a('Проваленные', ['index','status'=> 'failed'], ['class' => 'student-test-status-nav']) ?>
+        <?= Html::a('Выполненные', ['index','status'=> 'completed'], ['class' => 'student-test-status-nav']) ?>
+    </div>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -37,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {update} {delete} {pass}',  // the default buttons + your custom button
+                'template' => '{pass}',  // the default buttons + your custom button
                 'buttons' => [
                     'pass' => function($url, $model, $key) {     // render your custom button
                         return Html::a('Pass Test', ['test/view', 'id' => $model->test_id]);
