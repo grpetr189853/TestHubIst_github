@@ -64,6 +64,7 @@ function getUrlParams(url = location.search){
   //     params[match[1]] = match[2];
   // }
   // return params; 
+  console.log(url.substr(url.lastIndexOf('/') + 1));
   return url.substr(url.lastIndexOf('/') + 1);
 }
 $(\"body\").on(\"click\",\"#assign-table\", function(e){
