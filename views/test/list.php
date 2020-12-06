@@ -75,7 +75,7 @@ $(\"body\").on(\"click\",\"#assign-table\", function(e){
 //           var keys = $('#w0').yiiGridView(\"getSelectedRows\");
            var keys = $($(\"input.\" + e.target.className)[0]).val();
            var test_id = getUrlParams(location.href);
-           var url = '". \yii\helpers\Url::toRoute(['test/assign-test'])."' + \"/?id=\" + test_id.id;  
+           var url = '". \yii\helpers\Url::toRoute(['test/assign-test'])."' + \"/id/\" + test_id.id;  
            var doDelete;
            if($($(\"input.\" + e.target.className)[0]).is(':checked')){
                 doDelete = false;           
