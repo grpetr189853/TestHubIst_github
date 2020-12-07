@@ -49,7 +49,7 @@ class m201026_081631_create_question_table_and_relations extends Migration
         /*Questions*/
         $this->createTable('{{%question}}',[
             'id'            => $this->primaryKey(),
-            'title'         => $this->string()->notNull(),
+            'title'         => $this->text()->notNull(),
             'type'          => "scenario",
             'difficulty'    => $this->integer()->notNull(),
             'answer_id'     => $this->integer(),
