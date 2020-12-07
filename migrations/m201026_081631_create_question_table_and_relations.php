@@ -18,7 +18,7 @@ class m201026_081631_create_question_table_and_relations extends Migration
         }
 
     
-        $this->execute("create type scenario as enum ('select_one', 'select_many', 'numeric','string')");
+        // $this->execute("create type scenario as enum ('select_one', 'select_many', 'numeric','string')");
 
         /*Tests Category*/
         $this->createTable('{{%tests_category}}',[
